@@ -14,8 +14,6 @@ services:
       - 8989:8989 # Sonarr WebUI
       - 8686:8686 # Lidarr WebUI
       - 9696:9696 # Prowlarr WebUI
-      - 5055:5055 # Overseerr WebUI
-      - 7575:7575 # Homarr WebUI
     restart: unless-stopped
     networks:
       vpn:
@@ -101,33 +99,21 @@ services:
     network_mode: "service:airvpn"
     restart: unless-stopped
 
-  overseerr:
-    image: sctx/overseerr
-    container_name: overseerr
+  emby:
+    image: emby/embyserver
+    container_name: emby
+    network_mode: host # Enable DLNA and Wake-on-Lan
     environment:
-      - PUID=1001
-      - PGID=545
-      - TZ=Europe/Prague
+      - UID=1000 # The UID to run emby as (default: 2)
+      - GID=100 # The GID to run emby as (default 2)
+      - GIDLIST=100 # A comma-separated list of additional GIDs to run emby as (default: 2)
     volumes:
-      - /home/gurek/Repos/media-servarr/configs/overseerr:/app/config
-    depends_on:
-      - airvpn
-    network_mode: "service:airvpn"
-    restart: unless-stopped
-
-  homarr:
-    image: ghcr.io/ajnart/homarr:latest
-    container_name: homarr
-    environment:
-      - PUID=1001
-      - PGID=545
-      - TZ=Europe/Prague
-    volumes:
-      - /home/gurek/Repos/media-servarr/configs/homarr:/config
-    depends_on:
-      - airvpn
-    network_mode: "service:airvpn"
-    restart: unless-stopped
+      - /home/gurek/Repos/media-servarr/configs/emby:/config # Configuration directory
+      - /home/gurek/Media/tv:/mnt/share1 # Media directory
+      - /home/gurek/Media/movies:/mnt/share2 # Media directory
+    devices:
+      - /dev/dri:/dev/dri # VAAPI/NVDEC/NVENC render nodes
+    restart: on-failure
 
 networks:
   vpn:
