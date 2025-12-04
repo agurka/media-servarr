@@ -8,8 +8,7 @@ This repository contains the configuration files for setting up a media server u
 - Sonarr
 - Lidarr
 - Prowlarr
-- Overseerr
-- Homarr
+- Emby
 
 ## Prerequisites
 
