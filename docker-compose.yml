@@ -12,6 +12,7 @@ services:
       - 8080:8080 # qBittorrent WebUI
       - 7878:7878 # Radarr WebUI
       - 8989:8989 # Sonarr WebUI
+      - 6767:6767 # Bazarr WebUI
       - 8686:8686 # Lidarr WebUI
       - 9696:9696 # Prowlarr WebUI
     restart: unless-stopped
@@ -67,21 +68,6 @@ services:
     network_mode: "service:airvpn"
     restart: unless-stopped
 
-  lidarr:
-    image: linuxserver/lidarr
-    container_name: lidarr
-    environment:
-      - PUID=1001
-      - PGID=545
-      - TZ=Europe/Prague
-    volumes:
-      - /home/gurek/Repos/media-servarr/configs/lidarr:/config
-      - /home/gurek/media-servarr:/data
-    depends_on:
-      - airvpn
-    network_mode: "service:airvpn"
-    restart: unless-stopped
-
   prowlarr:
     image: linuxserver/prowlarr
     container_name: prowlarr
@@ -91,6 +77,21 @@ services:
       - TZ=Europe/Prague
     volumes:
       - /home/gurek/Repos/media-servarr/configs/prowlarr:/config
+    depends_on:
+      - airvpn
+    network_mode: "service:airvpn"
+    restart: unless-stopped
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1001
+      - PGID=545
+      - TZ=Europe/Prague
+    volumes:
+      - /home/gurek/Repos/media-servarr/configs/bazarr:/config
+      - /home/gurek/media-servarr:/data
     depends_on:
       - airvpn
     network_mode: "service:airvpn"
