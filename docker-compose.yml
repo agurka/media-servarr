@@ -8,6 +8,7 @@ services:
       - /dev/net/tun
     env_file:
       - docker.env
+      - .env
     ports:
       - 8080:8080 # qBittorrent WebUI
       - 7878:7878 # Radarr WebUI
