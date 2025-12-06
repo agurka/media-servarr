@@ -1,2 +1,5 @@
-/*/
-!/*/.gitignore
+# Ignore everything inside the subdirectories
+/*/*
+
+# But keep the subdirectories themselves
+!/*/
