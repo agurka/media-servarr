@@ -27,9 +27,9 @@ services:
     image: linuxserver/qbittorrent
     container_name: qbittorrent
     environment:
-      - PUID=1001
-      - PGID=545
-      - TZ=Europe/Prague
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
       - WEBUI_PORT=8080
     volumes:
       - /home/gurek/Repos/media-servarr/configs/qbittorrent:/config
@@ -43,9 +43,9 @@ services:
     image: linuxserver/radarr
     container_name: radarr
     environment:
-      - PUID=1001
-      - PGID=545
-      - TZ=Europe/Prague
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
     volumes:
       - /home/gurek/Repos/media-servarr/configs/radarr:/config
       - /home/gurek/media-servarr:/data
@@ -58,9 +58,9 @@ services:
     image: linuxserver/sonarr
     container_name: sonarr
     environment:
-      - PUID=1001
-      - PGID=545
-      - TZ=Europe/Prague
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
     volumes:
       - /home/gurek/Repos/media-servarr/configs/sonarr:/config
       - /home/gurek/media-servarr:/data
@@ -73,9 +73,9 @@ services:
     image: linuxserver/prowlarr
     container_name: prowlarr
     environment:
-      - PUID=1001
-      - PGID=545
-      - TZ=Europe/Prague
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
     volumes:
       - /home/gurek/Repos/media-servarr/configs/prowlarr:/config
     depends_on:
@@ -87,9 +87,9 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     environment:
-      - PUID=1001
-      - PGID=545
-      - TZ=Europe/Prague
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
     volumes:
       - /home/gurek/Repos/media-servarr/configs/bazarr:/config
       - /home/gurek/media-servarr:/data
@@ -103,9 +103,8 @@ services:
     container_name: emby
     network_mode: host # Enable DLNA and Wake-on-Lan
     environment:
-      - UID=1000 # The UID to run emby as (default: 2)
-      - GID=100 # The GID to run emby as (default 2)
-      - GIDLIST=100 # A comma-separated list of additional GIDs to run emby as (default: 2)
+      - UID=${PUID}
+      - GID=${PGID}
     volumes:
       - /home/gurek/Repos/media-servarr/configs/emby:/config # Configuration directory
       - /home/gurek/media-servarr:/data
