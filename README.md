@@ -1,13 +1,15 @@
+This repo is heavily inspired by https://github.com/idukkigold/media-server, I only made smaller changes to fit my use
+
 # Media Server Setup
 
 This repository contains the configuration files for setting up a media server using Docker Compose. The services included are:
 
-- NordVPN (Gluetun)
+- AirVPN (Gluetun)
 - qBittorrent
 - Radarr
 - Sonarr
-- Lidarr
 - Prowlarr
+- Bazarr
 - Emby
 
 ## Prerequisites
@@ -19,51 +21,43 @@ This repository contains the configuration files for setting up a media server u
 
 1. Clone this repository to your local machine.
 2. Navigate to the repository directory.
-3. Create a `docker.env` file with your NordVPN credentials and other necessary environment variables.
-4. Use [NordVPN WireGuard Config Generator](https://github.com/mustafachyi/NordVPN-WireGuard-Config-Generator) to get your WireGuard key from the NordVPN dashboard.
-5. Run the provided PowerShell script to create the necessary directories and set permissions:
+3. Create a `.env` file with your AirVPN credentials and other necessary environment variables. You can obtain the AirVPN wireguard config from their portal after logging in. If you wish to use a different VPN provider, check out gluetun docs
+4. Run the script `make_dirs.sh` to create the needed directories
+5. If using a different PUID, PGID from your own, run:
+  ```bash
+  source .env && sudo chmod sudo chown -R "$PUID":"$PGID" "$DATA_DIRECTORY"
+  ```
+6. Run the following command to start the services:
+  ```bash
+  docker-compose up -d
+  ```
+7. Now that you have the services running, you need to configure them. The basic idea is this:  
+    1. set up qBittorrent auth (if no password is read from configs, qbittorrent creates a single use password - get it using `docker logs qBittorrent` and change it in the ui to something you will remember)
+    2. configure Prowlarr with your trackers (you need a token from Sonarr and Radarr for this)
+    3. for configuring quality profiles, I used https://trash-guides.info/. Adjust to your liking.
+    4. Set up language profiles on Bazarr (don't forget to set some profile as default)
+    5. Create the media libraries in emby
 
-    ```sh
-    .\setup_directories.ps1
-    ```
-6. Update the file paths in `docker-compose.yml` to match your system's directory structure if needed.
-7. Run the following command to start the services:
-
-    ```sh
-    docker-compose up -d
-    ```
 
 ## Volumes
 
-The following volumes are used to persist data:
+It is best to use a single volume for mounting all the data. That way stuff downloaded by your torrent client is used by emby directly - using hardlinks instead of multiple files. This is how the repo is configured - just set up the path to the root directory and you're all set.
 
-- `E:\media-server\qbittorrent\config:/config`
-- `E:\media-server\downloads:/downloads`
-- `E:\media-server\radarr\config:/config`
-- `E:\Plex\Movies:/movies`
-- `E:\media-server\sonarr\config:/config`
-- `E:\Plex\TV:/tv`
-- `E:\media-server\lidarr\config:/config`
-- `E:\Plex\Music:/music`
-- `E:\media-server\prowlarr\config:/config`
-- `E:\media-server\overseerr\config:/app/config`
-- `E:\media-server\homarr\config:/config`
+## Networking
 
-## Network
-
-A custom bridge network named `vpn` is used to route traffic through the NordVPN container.
+qBittorrent runs in its own isolated network behind a VPN. All the other services use host networking
 
 ## Ports
 
 The following ports are exposed for the web UIs of the services:
 
-- qBittorrent: `8080`
+- qBittorrent: `8080` (only available on host machine)
 - Radarr: `7878`
 - Sonarr: `8989`
-- Lidarr: `8686`
 - Prowlarr: `9696`
-- Overseerr: `5055`
-- Homarr: `7575`
+- Bazarr: `6767`
+- emby: `8096`
+
 
 ## Restart Policy
 
