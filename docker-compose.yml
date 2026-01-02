@@ -32,7 +32,7 @@ services:
       - TZ=${TIMEZONE}
       - WEBUI_PORT=8080
     volumes:
-      - /home/gurek/Repos/media-servarr/configs/qbittorrent:/config
+      - ./configs/qbittorrent:/config
       - ${DATA_DIRECTORY}:/data
     depends_on:
       - airvpn
@@ -47,7 +47,7 @@ services:
       - PGID=${PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - /home/gurek/Repos/media-servarr/configs/radarr:/config
+      - ./configs/radarr:/config
       - ${DATA_DIRECTORY}:/data
     depends_on:
       - qbittorrent
@@ -62,7 +62,7 @@ services:
       - PGID=${PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - /home/gurek/Repos/media-servarr/configs/sonarr:/config
+      - ./configs/sonarr:/config
       - ${DATA_DIRECTORY}:/data
     depends_on:
       - qbittorrent
@@ -77,7 +77,7 @@ services:
       - PGID=${PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - /home/gurek/Repos/media-servarr/configs/prowlarr:/config
+      - ./configs/prowlarr:/config
     depends_on:
       - qbittorrent
     network_mode: host
@@ -91,7 +91,7 @@ services:
       - PGID=${PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - /home/gurek/Repos/media-servarr/configs/bazarr:/config
+      - ./configs/bazarr:/config
       - ${DATA_DIRECTORY}:/data
     depends_on:
       - qbittorrent
@@ -106,7 +106,7 @@ services:
       - UID=${PUID}
       - GID=${PGID}
     volumes:
-      - /home/gurek/Repos/media-servarr/configs/emby:/config # Configuration directory
+      - ./configs/emby:/config # Configuration directory
       - ${DATA_DIRECTORY}:/data
     devices:
       - /dev/dri:/dev/dri # VAAPI/NVDEC/NVENC render nodes
