@@ -33,7 +33,7 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - /home/gurek/Repos/media-servarr/configs/qbittorrent:/config
-      - /home/gurek/media-servarr:/data
+      - ${DATA_DIRECTORY}:/data
     depends_on:
       - airvpn
     network_mode: "service:airvpn"
@@ -48,7 +48,7 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - /home/gurek/Repos/media-servarr/configs/radarr:/config
-      - /home/gurek/media-servarr:/data
+      - ${DATA_DIRECTORY}:/data
     depends_on:
       - qbittorrent
     network_mode: host
@@ -63,7 +63,7 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - /home/gurek/Repos/media-servarr/configs/sonarr:/config
-      - /home/gurek/media-servarr:/data
+      - ${DATA_DIRECTORY}:/data
     depends_on:
       - qbittorrent
     network_mode: host
@@ -92,7 +92,7 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - /home/gurek/Repos/media-servarr/configs/bazarr:/config
-      - /home/gurek/media-servarr:/data
+      - ${DATA_DIRECTORY}:/data
     depends_on:
       - qbittorrent
     network_mode: host
@@ -107,7 +107,7 @@ services:
       - GID=${PGID}
     volumes:
       - /home/gurek/Repos/media-servarr/configs/emby:/config # Configuration directory
-      - /home/gurek/media-servarr:/data
+      - ${DATA_DIRECTORY}:/data
     devices:
       - /dev/dri:/dev/dri # VAAPI/NVDEC/NVENC render nodes
     restart: on-failure
