@@ -25,11 +25,11 @@ This repository contains the configuration files for setting up a media server u
 4. Run the script `make_dirs.sh` to create the needed directories
 5. If using a different PUID, PGID from your own, run:
   ```bash
-  source .env && sudo chmod sudo chown -R "$PUID":"$PGID" "$DATA_DIRECTORY"
+  source .env && sudo chown -R "$PUID":"$PGID" "$DATA_DIRECTORY"
   ```
 6. Run the following command to start the services:
   ```bash
-  docker-compose up -d
+  docker compose up -d
   ```
 7. Now that you have the services running, you need to configure them. The basic idea is this:  
     1. set up qBittorrent auth (if no password is read from configs, qbittorrent creates a single use password - get it using `docker logs qBittorrent` and change it in the ui to something you will remember)
